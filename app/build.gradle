@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    defaultConfig {
+        applicationId "com.spotifyplayer"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode build_versions.version_code
+        versionName build_versions.version_name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            buildConfigField "Boolean", "enableDebugLogging", "true"
+        }
+        release {
+            minifyEnabled false
+            buildConfigField "Boolean", "enableDebugLogging", "false"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path file('CMakeLists.txt')
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+    //java version required
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    kapt deps.room.compiler
+    kapt deps.glide.compiler
+    kapt deps.dagger.compiler
+
+    implementation deps.constraint_layout
+    implementation deps.support.app_compat
+    implementation deps.support.recyclerview
+    implementation deps.support.cardview
+    implementation deps.support.design
+
+    implementation deps.room.runtime
+    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.extensions
+    implementation deps.paging_ktx
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutines
+    implementation deps.kotlin.coroutines_ui
+    implementation deps.dagger.runtime
+
+
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.rxJava
+    implementation deps.okhttp_logging_interceptor
+
+    implementation deps.glide.runtime
+    implementation deps.rest_client
+
+
+    androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.atsl.rules
+    androidTestImplementation deps.arch_core.testing
+
+    androidTestImplementation deps.junit
+    androidTestImplementation deps.retrofit.mock
+    androidTestImplementation deps.mockito.core
+    androidTestImplementation deps.mockito.android
+
+    testImplementation deps.junit
+    testImplementation deps.retrofit.mock
+    testImplementation deps.arch_core.testing
+    testImplementation deps.mockito.core
+    testImplementation deps.roboletric
+}

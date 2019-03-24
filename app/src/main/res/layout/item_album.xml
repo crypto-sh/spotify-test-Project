@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="album"    type="com.spotifyplayer.models.Album"/>
+        <variable name="imageUrl" type="com.spotifyplayer.models.Image"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="@dimen/item_margin"
+            android:layout_marginStart="@dimen/item_margin"
+            android:layout_marginBottom="@dimen/item_margin"
+            android:layout_height="wrap_content">
+
+
+        <com.spotifyplayer.customViews.ImageViewCustom
+                android:id="@+id/imageViewCustom"
+                app:image_shape="square"
+                app:imageUrl="@{imageUrl}"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.spotifyplayer.customViews.TextViewCustom
+                android:id="@+id/titleTextView"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:text="@{album.artists.size > 0 ? (album.artists[0].name) :  album.name}"
+                style="@style/TitleTextView"
+                app:layout_constraintTop_toTopOf="@+id/imageViewCustom"
+                app:layout_constraintStart_toEndOf="@id/imageViewCustom"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.spotifyplayer.customViews.TextViewCustom
+                android:id="@+id/subtitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:text="@{album.name}"
+                style="@style/subtitleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+                app:layout_constraintStart_toEndOf="@id/imageViewCustom"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

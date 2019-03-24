@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ImageViewCustom">
+        <attr name="image_shape" format="enum">
+            <enum name="undefine"   value="0"/>
+            <enum name="circle"     value="1"/>
+            <enum name="rounded"    value="2"/>
+            <enum name="square"     value="3"/>
+        </attr>
+        <attr name="radius" format="dimension"/>
+    </declare-styleable>
+
+</resources>
