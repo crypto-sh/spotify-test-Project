@@ -3,10 +3,10 @@ package com.spotifyplayer.repository.byPage
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.spotifyplayer.api.RestRequest
-import com.spotifyplayer.db.ArtistDao
+
 import com.spotifyplayer.db.SpotifyDb
 import com.spotifyplayer.models.Artist
-import com.spotifyplayer.models.NetworkState
+import com.spotifyplayer.enums.NetworkState
 import com.spotifyplayer.models.webResult
 import com.spotifyplayer.utils.AppExecuter
 import com.spotifyplayer.utils.LogHelper
@@ -19,11 +19,16 @@ class MainPagedDataSource(
     val tokenRequest    : RestRequest,
     val query           : String,
     val pageSize        : Int,
+    val isTestMode      : Boolean,
     val database        : SpotifyDb,
     val executer        : AppExecuter
 ) : PageKeyedDataSource<Int, Artist>() {
 
     private var retry: (() -> Any)? = null
+
+    private val logHelper = LogHelper(this::class.java)
+
+    val networkState = MutableLiveData<NetworkState>()
 
     fun retryAllFailed() {
         val prevRetry = retry
@@ -35,13 +40,9 @@ class MainPagedDataSource(
         }
     }
 
-    val logHelper = LogHelper(this::class.java)
-
-    val networkState = MutableLiveData<NetworkState>()
-
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Artist>) {
         networkState.postValue(NetworkState.LOADING)
-        RestRequest.executer(executer.networkIO, tokenRequest, object : OnAuthorization {
+        RestRequest.executer(executer.networkIO, isTestMode,tokenRequest, object : OnAuthorization {
             override fun onAuthorized(restApi: RestRequest) {
                 restApi.searchArtist(query, "album,artist,playlist,track", 0, pageSize)
                     .enqueue(object : Callback<webResult> {
@@ -59,9 +60,7 @@ class MainPagedDataSource(
                                     retry = null
                                     networkState.postValue(NetworkState.LOADED)
                                     val result = response.body()
-                                    executer.diskIO.execute {
-                                        insertDataIntoDb(result!!.artists.items)
-                                    }
+                                    //TODO insert data into database if database needed
 
                                     callback.onResult(result!!.artists.items, null, 2)
                                 } else {
@@ -88,7 +87,7 @@ class MainPagedDataSource(
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Artist>) {
         networkState.postValue(NetworkState.LOADING)
-        RestRequest.executer(executer.networkIO, tokenRequest, object : OnAuthorization {
+        RestRequest.executer(executer.networkIO, isTestMode,tokenRequest, object : OnAuthorization {
             override fun onAuthorized(restApi: RestRequest) {
                 restApi
                     .searchArtist(query, "album", 0, pageSize)
@@ -107,9 +106,8 @@ class MainPagedDataSource(
                                     retry = null
                                     networkState.postValue(NetworkState.LOADED)
                                     val items = response.body()?.artists!!.items
-                                    executer.diskIO.execute {
-                                        insertDataIntoDb(items)
-                                    }
+                                    //TODO insert data into database if database needed
+
                                     callback.onResult(items, params.key + 1)
                                 } else {
                                     networkState.postValue(NetworkState.error("error code:  ${response.code()}"))
@@ -135,12 +133,6 @@ class MainPagedDataSource(
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Artist>) {
         logHelper.d("loadBefore")
-    }
-
-    fun insertDataIntoDb(artists: List<Artist>) {
-        database.runInTransaction {
-            database.artistDao().insertAll(artists)
-        }
     }
 
 }

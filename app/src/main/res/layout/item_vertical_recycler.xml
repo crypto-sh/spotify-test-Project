@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="title" type="String"/>
+    </data>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="222dp">
+
+        <com.spotifyplayer.customViews.TextViewCustom
+                android:id="@+id/rowTitleText"
+                android:paddingStart="@dimen/item_margin"
+                android:paddingEnd="@dimen/item_margin"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimary"
+                android:text="@{title}"
+                tools:text="@tools:sample/first_names"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/horizontalRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+</layout>

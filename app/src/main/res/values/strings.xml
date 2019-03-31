@@ -1,6 +1,17 @@
 <resources>
 
     <string name="app_name">SpotifyPlayer</string>
-    <string name="splash_image">https://previews.123rf.com/images/kaidash/kaidash1506/kaidash150600149/41817350-abstract-watercolor-splash-watercolor-drop-.jpg</string>
+    <string name="splash_image">
+        https://previews.123rf.com/images/kaidash/kaidash1506/kaidash150600149/41817350-abstract-watercolor-splash-watercolor-drop-.jpg
+    </string>
+
+
+    <string name="title_activity_list_without_paging">ListWithoutPaging</string>
+
+    <string name="album">Trend Album</string>
+    <string name="artist">Trend Artist</string>
+    <string name="playlist">Trend Playlist</string>
+    <string name="track">Trend Track</string>
+
 </resources>
 

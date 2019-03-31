@@ -12,6 +12,7 @@ import com.spotifyplayer.utils.AppExecuter
 class MainDataSourceFactory(val tokenRequest    : RestRequest,
                             val query           : String,
                             val pageSize        : Int,
+                            val isTestMode      : Boolean,
                             val database        : SpotifyDb,
                             val executer        : AppExecuter): DataSource.Factory<Int,Artist>() {
 
@@ -22,6 +23,7 @@ class MainDataSourceFactory(val tokenRequest    : RestRequest,
             tokenRequest = tokenRequest,
             query        = query,
             executer     = executer,
+            isTestMode   = isTestMode,
             database     = database,
             pageSize     = pageSize)
 

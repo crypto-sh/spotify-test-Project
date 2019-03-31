@@ -1,6 +1,7 @@
 package com.spotifyplayer.utils
 
 import android.app.Application
+import com.spotifyplayer.db.SpotifyDb
 
 
 class BaseApp : Application() {
@@ -15,5 +16,10 @@ class BaseApp : Application() {
 
     external fun clientSecret(): String
 
+    var database : SpotifyDb? = null
 
+    override fun onCreate() {
+        super.onCreate()
+        database = SpotifyDb.getInstance(applicationContext,false)
+    }
 }

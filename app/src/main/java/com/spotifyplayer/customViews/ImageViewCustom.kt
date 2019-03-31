@@ -19,7 +19,7 @@ import com.spotifyplayer.utils.LogHelper
 
 class ImageViewCustom : AppCompatImageView {
 
-    private var radius: Float = 0F
+    private var radius: Float = 10F
 
     private var shape: ShapeImage = ShapeImage.UNDEFINE
 
@@ -30,8 +30,8 @@ class ImageViewCustom : AppCompatImageView {
     @SuppressLint("Recycle")
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         val type = context!!.obtainStyledAttributes(attrs, R.styleable.ImageViewCustom)
-        shape = ShapeImage.parse(type.getInt(R.styleable.ImageViewCustom_image_shape, 0))
-        radius = type.getDimension(R.styleable.ImageViewCustom_radius, 0F)
+        shape                = ShapeImage.parse(type.getInt(R.styleable.ImageViewCustom_image_shape, 0))
+        radius               = type.getDimension(R.styleable.ImageViewCustom_radius, 0F)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -63,7 +63,7 @@ class ImageViewCustom : AppCompatImageView {
             var loader = request
                 .fitCenter()
                 .skipMemoryCache(true)
-                .fitCenter()
+                .centerInside()
 
             if (cache){
                 loader = loader.diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -79,7 +79,7 @@ class ImageViewCustom : AppCompatImageView {
                 }
                 else -> {
                     loader
-                        .apply(RequestOptions().transform(RoundedCorners(convertDpToPixelsInt(10F))))
+                        .apply(RequestOptions().transform(RoundedCorners(convertDpToPixelsInt(radius))))
                         .placeholder(R.drawable.place_holder)
                 }
             }

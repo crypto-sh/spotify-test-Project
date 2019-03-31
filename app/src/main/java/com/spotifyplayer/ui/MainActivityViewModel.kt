@@ -1,21 +1,26 @@
 package com.spotifyplayer.ui
 
 import androidx.annotation.MainThread
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.spotifyplayer.api.RestRequest
 import com.spotifyplayer.db.SpotifyDb
+import com.spotifyplayer.enums.NetworkState
 import com.spotifyplayer.models.Artist
-import com.spotifyplayer.models.RepositoryResult
+import com.spotifyplayer.models.RepositoryResultPaging
 import com.spotifyplayer.repository.byPage.MainDataSourceFactory
 import com.spotifyplayer.utils.AppExecuter
 
 
-class MainActivityViewModel(val tokenRequest : RestRequest,val database : SpotifyDb, val executer: AppExecuter) : ViewModel() {
+class MainActivityViewModel(
+    val tokenRequest: RestRequest,
+    val isTestMode: Boolean,
+    val database: SpotifyDb,
+    val executer: AppExecuter
+) :
+    ViewModel() {
 
     private val query = MutableLiveData<String>()
 
@@ -23,9 +28,12 @@ class MainActivityViewModel(val tokenRequest : RestRequest,val database : Spotif
         searchQueryData(query = it)
     }!!
 
-    val data         = Transformations.switchMap(repoResult) { it.pagedList }!!
-    val networkState = Transformations.switchMap(repoResult) { it.networkState }!!
+    val data = Transformations.switchMap(repoResult) { it.pagedList }!!
+    val networkState = Transformations.switchMap(repoResult) {
+        it.networkState
+    }!!
 
+    val showingProgress = ObservableBoolean()
 
     fun searchResultShow(searchQuery: String) {
         query.value.let {
@@ -38,23 +46,22 @@ class MainActivityViewModel(val tokenRequest : RestRequest,val database : Spotif
         }
     }
 
-    fun retry(){
+    fun retry() {
         val listing = repoResult.value
         listing?.retry?.invoke()
     }
 
-
     @MainThread
-    fun searchQueryData(query: String): RepositoryResult<Artist> {
+    fun searchQueryData(query: String): RepositoryResultPaging<Artist> {
         val pageSize = 20
-        val sourceFactory =
-            MainDataSourceFactory(
-                tokenRequest    = tokenRequest,
-                query           = query,
-                executer        = executer,
-                database        = database,
-                pageSize        = pageSize)
-
+        val sourceFactory = MainDataSourceFactory(
+            tokenRequest = tokenRequest,
+            query = query,
+            isTestMode = isTestMode,
+            executer = executer,
+            database = database,
+            pageSize = pageSize
+        )
 
         val pagedListConfig = PagedList.Config.Builder()
             .setEnablePlaceholders(true)
@@ -62,9 +69,9 @@ class MainActivityViewModel(val tokenRequest : RestRequest,val database : Spotif
             .setPageSize(pageSize)
             .build()
 
-        val livePagedList = LivePagedListBuilder<Int,Artist>(sourceFactory, pagedListConfig).build()
+        val livePagedList = LivePagedListBuilder<Int, Artist>(sourceFactory, pagedListConfig).build()
 
-        return RepositoryResult(
+        return RepositoryResultPaging(
             pagedList = livePagedList,
             networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.networkState
@@ -74,12 +81,34 @@ class MainActivityViewModel(val tokenRequest : RestRequest,val database : Spotif
             })
     }
 
-    class Factory(val tokenRequest: RestRequest,val database: SpotifyDb, val executer: AppExecuter) : ViewModelProvider.NewInstanceFactory() {
+    fun showProgress(showing: NetworkState) {
+        when (showing) {
+            NetworkState.LOADING -> {
+                showingProgress.set(true)
+            }
+            else -> {
+                showingProgress.set(false)
+            }
+        }
+    }
+
+    class Factory(
+        val tokenRequest: RestRequest,
+        val isTestMode: Boolean,
+        val database: SpotifyDb,
+        val executer: AppExecuter
+    ) :
+        ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
             @Suppress("UNCHECKED_CAST")
-            return MainActivityViewModel(tokenRequest = tokenRequest,database = database, executer = executer) as T
+            return MainActivityViewModel(
+                tokenRequest = tokenRequest,
+                database = database,
+                isTestMode = isTestMode,
+                executer = executer
+            ) as T
         }
     }
 

@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="viewModel" type="com.spotifyplayer.ui.MainActivityViewModel"/>
+        <variable name="viewModel" type="com.spotifyplayer.ui.ListWithoutPagingViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -34,7 +34,7 @@
                 tools:context=".fragments.HomeFragment">
 
             <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/searchEditText"
+                    android:id="@+id/inputEditText"
                     android:layout_margin="@dimen/header_margin"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
@@ -48,8 +48,9 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/searchEditText"
+                    app:layout_constraintTop_toBottomOf="@id/inputEditText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

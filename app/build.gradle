@@ -34,21 +34,14 @@ android {
     dataBinding {
         enabled = true
     }
-    //java version required
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
+        unitTests.returnDefaultValues = true
     }
-}
-
-kapt {
-    generateStubs = true
 }
 
 dependencies {
@@ -58,41 +51,32 @@ dependencies {
 
     implementation deps.constraint_layout
     implementation deps.support.app_compat
-    implementation deps.support.recyclerview
     implementation deps.support.cardview
     implementation deps.support.design
-
     implementation deps.room.runtime
     implementation deps.lifecycle.runtime
     implementation deps.lifecycle.extensions
-    implementation deps.paging_ktx
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines
     implementation deps.kotlin.coroutines_ui
     implementation deps.dagger.runtime
-
-
+    implementation deps.paging_ktx
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.retrofit.rxJava
     implementation deps.okhttp_logging_interceptor
-
     implementation deps.glide.runtime
-    implementation deps.rest_client
 
 
-    androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.atsl.core
     androidTestImplementation deps.atsl.rules
-    androidTestImplementation deps.arch_core.testing
+    androidTestImplementation deps.atsl.runner
+    androidTestImplementation deps.atsl.ext_junit
+    androidTestImplementation deps.atsl.ext_truth
+    androidTestImplementation deps.atsl.truth
+    androidTestImplementation deps.atsl.core_test
+    androidTestImplementation deps.mock_web_server
+    androidTestImplementation deps.espresso.core
+    androidTestImplementation deps.espresso.intents
 
-    androidTestImplementation deps.junit
-    androidTestImplementation deps.retrofit.mock
-    androidTestImplementation deps.mockito.core
-    androidTestImplementation deps.mockito.android
-
-    testImplementation deps.junit
-    testImplementation deps.retrofit.mock
-    testImplementation deps.arch_core.testing
-    testImplementation deps.mockito.core
-    testImplementation deps.roboletric
 }

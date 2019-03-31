@@ -9,20 +9,46 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TitleTextView" >
+    <style name="TitleTextView">
         <item name="android:layout_height">42dp</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">#1A1818</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="subtitleTextView" >
+    <style name="VerticalTitleTextView">
+        <item name="android:textColor">#1A1818</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:padding">@dimen/header_margin</item>
+    </style>
+
+    <style name="subtitleTextView">
         <item name="android:layout_height">36dp</item>
-        <item name="android:textColor">#C9C3C3</item>
+        <item name="android:textColor">#494747</item>
         <item name="android:textSize">12sp</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
     </style>
+
+    <style name="buttonStyle">
+        <item name="android:layout_height">42dp</item>
+        <item name="android:textColor">#EBE6E6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_margin">@dimen/card_margin</item>
+        <item name="android:paddingStart">@dimen/card_margin</item>
+        <item name="android:paddingEnd">@dimen/card_margin</item>
+        <item name="android:background">@drawable/button_background</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

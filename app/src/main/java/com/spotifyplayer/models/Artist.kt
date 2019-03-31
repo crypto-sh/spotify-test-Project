@@ -7,25 +7,48 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "artist")
+@Entity(tableName = "artists")
 data class Artist(
-    @PrimaryKey
-    val id   : String,
-    val name : String,
-    val type : String,
-    val uri  : String,
-    val href : String,
-    val spotify : String
-) : Parcelable{
+    @PrimaryKey val id: String,
+    val name: String,
+    val type: String,
+    val uri: String,
+    val href: String,
+    val images: List<Image>,
+    val popularity: Int,
+    val spotify: String
+) : Parcelable {
+
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.createTypedArrayList(Image),
+        parcel.readInt(),
+        parcel.readString()
     ) {
     }
+
+
+    override fun equals(other: Any?): Boolean {
+        if (other == this) {
+            return true
+        }
+        val artist = other as Artist
+        return artist.id == this.id
+    }
+//
+//    override fun hashCode(): Int {
+//        var result = id.hashCode()
+//        result = 31 * result + name.hashCode()
+//        result = 31 * result + type.hashCode()
+//        result = 31 * result + uri.hashCode()
+//        result = 31 * result + href.hashCode()
+//        result = 31 * result + spotify.hashCode()
+//        return result
+//    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
@@ -33,6 +56,8 @@ data class Artist(
         parcel.writeString(type)
         parcel.writeString(uri)
         parcel.writeString(href)
+        parcel.writeTypedList(images)
+        parcel.writeInt(popularity)
         parcel.writeString(spotify)
     }
 
@@ -50,7 +75,7 @@ data class Artist(
         }
 
         // DiffCallback to assist Adapter
-        val DIFF_CALLBACK : DiffUtil.ItemCallback<Artist> = object : DiffUtil.ItemCallback<Artist>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<Artist> = object : DiffUtil.ItemCallback<Artist>() {
             override fun areItemsTheSame(oldItem: Artist, newItem: Artist): Boolean {
                 return oldItem.equals(newItem)
             }
@@ -59,23 +84,6 @@ data class Artist(
                 return TextUtils.equals(oldItem.id, newItem.id) && TextUtils.equals(oldItem.name, newItem.name)
             }
         }
-    }
-    override fun equals(other: Any?): Boolean {
-        if (other == this){
-            return true
-        }
-        val artist = other as Artist
-        return  artist.id == this.id
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + type.hashCode()
-        result = 31 * result + uri.hashCode()
-        result = 31 * result + href.hashCode()
-        result = 31 * result + spotify.hashCode()
-        return result
     }
 
 }

@@ -4,10 +4,11 @@ package com.spotifyplayer.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.Gson
 
-data class Image(val height : Int,
-                 val width  : Int,
-                 val url    : String) : Parcelable{
+data class Image(val height     : Int,
+                 val width      : Int,
+                 val url        : String) : Parcelable{
 
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -35,5 +36,9 @@ data class Image(val height : Int,
         override fun newArray(size: Int): Array<Image?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun toString(): String {
+        return Gson().toJson(Image).toString()
     }
 }

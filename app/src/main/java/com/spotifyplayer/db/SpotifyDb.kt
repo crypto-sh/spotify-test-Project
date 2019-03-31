@@ -5,10 +5,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.spotifyplayer.models.Artist
 
 
 @Database(entities = arrayOf(Artist::class),version = 1,exportSchema = false)
+@TypeConverters(DataConvertor::class)
 abstract class SpotifyDb : RoomDatabase(){
 
     abstract fun artistDao() : ArtistDao

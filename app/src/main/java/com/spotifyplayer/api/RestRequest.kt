@@ -31,11 +31,18 @@ interface RestRequest {
 
     companion object {
 
-        private const val BASE_URL = "https://api.spotify.com/v1/"
+        private const val BASE_URL      = "https://api.spotify.com/v1/"
+        private const val TEST_BASE_URL = "http://localhost:8080/"
+
+        private fun BASE_URL(isTest : Boolean) =
+            if(!isTest)
+                BASE_URL
+            else
+                TEST_BASE_URL
 
         val logHelper = LogHelper(this::class.java)
 
-        fun executer(networkExecutor: Executor, loginService: RestRequest, callback: OnAuthorization) {
+        fun executer(networkExecutor: Executor, isTest: Boolean, loginService: RestRequest, callback: OnAuthorization) {
             try {
                 networkExecutor.execute {
                     val call = loginService.getAccessToken("client_credentials")
@@ -45,7 +52,7 @@ interface RestRequest {
                         }
 
                         override fun onResponse(call: Call<AccessToken>, response: retrofit2.Response<AccessToken>) {
-                            callback.onAuthorized(getRestApi(response.body()!!))
+                            callback.onAuthorized(getRestApi(response.body()!!,isTest))
                         }
                     })
                 }
@@ -54,7 +61,7 @@ interface RestRequest {
             }
         }
 
-        private fun getRestApi(token: AccessToken): RestRequest {
+        private fun getRestApi(token: AccessToken, isTest: Boolean): RestRequest {
             val httpClient = OkHttpClient.Builder()
             val interceptor = object : Interceptor{
                 override fun intercept(chain: Interceptor.Chain): Response {
@@ -70,7 +77,7 @@ interface RestRequest {
             logging.level = HttpLoggingInterceptor.Level.BODY
             httpClient.addInterceptor(logging)
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(BASE_URL(isTest))
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(httpClient.build())

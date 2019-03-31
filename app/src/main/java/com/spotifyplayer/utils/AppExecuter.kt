@@ -2,11 +2,24 @@ package com.spotifyplayer.utils
 
 import android.os.Handler
 import android.os.Looper
+import dagger.Module
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
-class AppExecuter constructor(var diskIO: Executor, var networkIO: Executor, var mainThread: Executor) {
+var INSTANCE : AppExecuter? = null
+
+@Module class AppExecuter constructor(var diskIO: Executor, var networkIO: Executor, var mainThread: Executor) {
+
+    companion object {
+
+        fun getAppExecutor() : AppExecuter {
+            if (INSTANCE == null){
+                INSTANCE = AppExecuter()
+            }
+            return INSTANCE!!
+        }
+    }
 
     @Inject constructor() : this(
         Executors.newSingleThreadExecutor(),

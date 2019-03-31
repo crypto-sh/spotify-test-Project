@@ -3,6 +3,8 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.spotifyplayer">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".utils.BaseApp"
             android:allowBackup="true"
@@ -12,6 +14,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+
+        <!-- You don't need to include android:required="false" if your app's minSdkVersion is 28 or higher. -->
+        <uses-library android:name="android.test.runner" android:required="false" />
+
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,7 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity" />
+
+        <activity android:name=".ui.ListWithoutPaging"/>
+
+        <activity android:name=".ui.MainActivity"/>
+
     </application>
 
 </manifest>

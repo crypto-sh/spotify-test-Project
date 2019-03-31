@@ -10,8 +10,6 @@ import android.R.id
 import androidx.annotation.NonNull
 
 
-
-
 data class Album (
     val id                  : String,
     val album_type          : String,
@@ -26,7 +24,6 @@ data class Album (
     val type                : String,
     val uri                 : String
 ) : Parcelable {
-
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),

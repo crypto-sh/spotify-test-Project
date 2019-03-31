@@ -4,22 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.spotifyplayer.databinding.ItemArtistBinding
+import com.spotifyplayer.databinding.ItemArtistVerticalBinding
+import com.spotifyplayer.enums.NetworkState
 import com.spotifyplayer.models.Artist
-import com.spotifyplayer.models.NetworkState
 import com.spotifyplayer.utils.artistCallBack
 
 class SearchPagedAdapter : PagedListAdapter<Artist, RecyclerView.ViewHolder>(Artist.DIFF_CALLBACK) {
 
     var items = ArrayList<Artist>()
 
-    var artistCallBack : artistCallBack? = null
-
     private var networkState: NetworkState? = null
+
+    var artistCallBack : artistCallBack? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater    = LayoutInflater.from(parent.context)
-        val itemArtist = ItemArtistBinding.inflate(inflater, parent,false)
+        val itemArtist = ItemArtistVerticalBinding.inflate(inflater, parent,false)
         return ArtistHolder(itemArtist)
     }
 
@@ -31,7 +31,7 @@ class SearchPagedAdapter : PagedListAdapter<Artist, RecyclerView.ViewHolder>(Art
         (holder as ArtistHolder).bindData(items[position])
     }
 
-    class ArtistHolder(private val viewItem : ItemArtistBinding) : RecyclerView.ViewHolder(viewItem.root){
+    class ArtistHolder(private val viewItem : ItemArtistVerticalBinding) : RecyclerView.ViewHolder(viewItem.root){
 
         fun bindData(artist : Artist){
             viewItem.artist = artist
