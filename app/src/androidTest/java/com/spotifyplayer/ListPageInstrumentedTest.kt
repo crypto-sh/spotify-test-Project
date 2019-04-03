@@ -42,7 +42,7 @@ class ListPageInstrumentedTest {
     fun showListWithoutPaging() {
         val intent = ListWithoutPaging.intentFor(
             context = InstrumentationRegistry.getInstrumentation().targetContext,
-            isTestMode = true
+            isTestMode = false
         )
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent)

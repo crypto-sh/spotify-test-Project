@@ -36,7 +36,7 @@ class webServiceTest  {
         webServer!!.setDispatcher(MockServerDispatcher.RequestDispatcher())
         val intent              = ListWithoutPaging.intentFor(
             context = InstrumentationRegistry.getInstrumentation().targetContext,
-            isTestMode = true
+            isTestMode = false
         )
         activityRule.launchActivity(intent)
         onView(withId(R.id.progressBar)).check(matches(isDisplayed()))
